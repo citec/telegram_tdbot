@@ -58,7 +58,7 @@ def get_data(myFormat=None):
         for row in data:
             if row['tid'] not in last_data.keys():
                 last_data[row['tid']] = {}
-            if not last_data[row['tid']] or last_data[row['tid']]['dh'] > row['dh']:
+            if not last_data[row['tid']] or last_data[row['tid']]['dh'] < row['dh']:
                 last_data[row['tid']] = row
 
         response = []
