@@ -1,0 +1,5 @@
+bot:
+  build: .
+  command: /usr/local/bin/python /app/bot.py
+  volumes:
+    - bot.py:/app/bot.py
