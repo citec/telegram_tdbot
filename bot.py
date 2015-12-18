@@ -21,7 +21,7 @@ def send_welcome(message):
 Olá, sou o bot não oficial to Tesouro Direto
 Escreve /taxas para ver as últimas taxas do TD.
 Escreve /tudo para ver os últimos preços do TD.
-Escreve /DI1F17 /DI1F19 /DI1F20 /DI1F22 /DI1F25 para ver a cotação dos DI futuro.
+Escreve /DI1F17 /DI1F19 /DI1F20 /DI1F21 /DI1F22 /DI1F25 para ver a cotação dos DI futuro.
 Para qualqer dúvida, contate o autor: @jaime_GrupoCITEC
 Aceitamos doações em #bitcoin: 1GBHvQVHsxBzmf4FDsnFwjDrNeozcR8n1a
 """)
@@ -84,7 +84,7 @@ def get_data(myFormat=None):
     else:
         return None
 
-@bot.message_handler(commands=['DI1F17', 'DI1F19', 'DI1F20', 'DI1F22', 'DI1F25', 'di1f17', 'di1f19', 'di1f20', 'di1f22', 'di1f25'])
+@bot.message_handler(commands=['DI1F17', 'DI1F19', 'DI1F20', 'DI1F21', 'DI1F22', 'DI1F25', 'di1f17', 'di1f19', 'di1f20', 'di1f21', 'di1f22', 'di1f25'])
 def send_difut(message):
     _logger.error("message = %s" % (message, ))
     url = 'http://br.advfn.com/bolsa-de-valores/bmf%s/cotacao' % message.text.split('@')[0].upper()
