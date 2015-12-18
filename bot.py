@@ -5,8 +5,9 @@ import telebot
 import requests
 from BeautifulSoup import BeautifulSoup
 from datetime import datetime
+from decouple import config
 
-API_TOKEN = '146952018:AAEL5s1Q--lhxnZO7lYlFk7WVejYXavQ25k'
+API_TOKEN = config('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
