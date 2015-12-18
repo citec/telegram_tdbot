@@ -3,6 +3,7 @@
 import json
 import telebot
 import requests
+from BeautifulSoup import BeautifulSoup
 from datetime import datetime
 
 API_TOKEN = '146952018:AAEL5s1Q--lhxnZO7lYlFk7WVejYXavQ25k'
@@ -19,6 +20,7 @@ def send_welcome(message):
 Olá, sou o bot não oficial to Tesouro Direto
 Escreve /taxas para ver as últimas taxas do TD.
 Escreve /tudo para ver os últimos preços do TD.
+Escreve /difut para ver a cotação do DI futuro.
 Para qualqer dúvida, contate o autor: @jaime_GrupoCITEC
 """)
 
@@ -84,6 +86,15 @@ def get_data(myFormat=None):
         return response
     else:
         return None
+
+@bot.message_handler(commands=['difut'])
+def send_difut(message):
+    content = requests.get('http://br.advfn.com/bolsa-de-valores/bmf/DI1F25/cotacao')
+    soup = BeautifulSoup(content.content)
+    difut = soup.findAll('div', attrs={'class': 'TableElement'})[1].findAll('td')[3].text
+    if difut:
+        chat_id = message.chat.id
+        bot.send_message(chat_id, u'DI Futuro: %s' % difut)
 
 bot.polling()
 

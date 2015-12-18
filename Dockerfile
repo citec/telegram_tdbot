@@ -8,7 +8,7 @@ RUN pip install pytest==2.7.2
 RUN pip install requests==2.7.0
 RUN pip install six==1.9.0
 RUN pip install wheel==0.24.0
-RUN pip install BeautifulSoup4
+RUN pip install BeautifulSoup
 WORKDIR /tmp
 RUN git clone https://github.com/eternnoir/pyTelegramBotAPI.git
 WORKDIR /tmp/pyTelegramBotAPI
