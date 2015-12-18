@@ -43,15 +43,30 @@ def taxas(message):
 def get_data(myFormat=None):
     if myFormat is None:
         myFormat = u'{nom} | C: {txc}% / R${puc} | V: {txv}% / R${puv}\n'
-    # TODO 2: If data is passed, parse it and send it (17/12/2015 by: Jaime Alberto Sanchez Hidalgo)
-    url = 'http://tdireto.com/ws/cotacaoPorDiaWS.php?dt=%(day)d%%2F%(month)d%%2F%(year)d&dcn=0' % {
+    # Get last update data
+    url = 'http://tdireto.com/ws/cotacaoPorDiaWS.php?dt=%(day)02d%%2F%(month)02d%%2F%(year)d&dcn=0' % {
         'day': datetime.today().day,
         'month': datetime.today().month,
         'year': datetime.today().year,
     }
+    _logger.info("url = %s" % (url, ))
     jsjson = requests.get(url)
     content = jsjson.content.decode("utf-8")
     content = json.loads(content)
+    _logger.info("content = %s" % (content, ))
+    if 'data' not in content.keys() or not content['data']:
+        date = content.get('dta', False)
+        if date:
+            url = 'http://tdireto.com/ws/cotacaoPorDiaWS.php?dt=%(day)02d%%2F%(month)02d%%2F%(year)d&dcn=0' % {
+                'day': int(date.split(' ')[0].split('/')[0]),
+                'month': int(date.split(' ')[0].split('/')[1]),
+                'year': int(date.split(' ')[0].split('/')[2]),
+            }
+            _logger.info("url = %s" % (url, ))
+            jsjson = requests.get(url)
+            content = jsjson.content.decode("utf-8")
+            content = json.loads(content)
+            _logger.info("content = %s" % (content, ))
     if 'data' in content.keys():
         data = content['data']
         last_data = {}
@@ -65,6 +80,7 @@ def get_data(myFormat=None):
         for tid, row in last_data.items():
             response += [myFormat.format(**row)]
         response = list(sorted(response))
+        _logger.info("response = %s" % (response, ))
         return response
     else:
         return None
