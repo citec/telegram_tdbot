@@ -14,3 +14,7 @@ RUN git clone https://github.com/eternnoir/pyTelegramBotAPI.git
 WORKDIR /tmp/pyTelegramBotAPI
 RUN /usr/local/bin/python setup.py install
 RUN pip install ipdb
+# Timezone
+RUN mkdir /tz && mv /etc/timezone /tz/ && mv /etc/localtime /tz/ && ln -s /tz/timezone /etc/ && ln -s /tz/localtime /etc/
+RUN echo "America/Sao_Paulo" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && cp /etc/localtime /tz/
+VOLUME /tz
