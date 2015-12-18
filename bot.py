@@ -87,7 +87,7 @@ def get_data(myFormat=None):
 @bot.message_handler(commands=['DI1F17', 'DI1F19', 'DI1F20', 'DI1F22', 'DI1F25', 'di1f17', 'di1f19', 'di1f20', 'di1f22', 'di1f25'])
 def send_difut(message):
     _logger.error("message = %s" % (message, ))
-    url = 'http://br.advfn.com/bolsa-de-valores/bmf%s/cotacao' % message.text.upper()
+    url = 'http://br.advfn.com/bolsa-de-valores/bmf%s/cotacao' % message.text.split('@')[0].upper()
     _logger.error("url = %s" % (url, ))
     content = requests.get(url)
     _logger.error("content = %s" % (content, ))
@@ -95,7 +95,7 @@ def send_difut(message):
     difut = soup.findAll('div', attrs={'class': 'TableElement'})[1].findAll('td')[3].text
     if difut:
         chat_id = message.chat.id
-        bot.send_message(chat_id, u'%s: %s' % (message.text.upper(), difut))
+        bot.send_message(chat_id, u'%s: %s' % (message.text.split('@')[0].upper(), difut))
 
 bot.polling()
 
