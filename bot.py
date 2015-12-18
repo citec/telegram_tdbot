@@ -14,15 +14,16 @@ bot = telebot.TeleBot(API_TOKEN)
 _logger = telebot.logger
 
 # Handle '/start' and '/help'
-@bot.message_handler(commands=['ajuda'])
+@bot.message_handler(commands=['start', 'help', 'ajuda'])
 def send_welcome(message):
     chat_id = message.chat.id
     bot.send_message(chat_id, u"""\
 Olá, sou o bot não oficial to Tesouro Direto
 Escreve /taxas para ver as últimas taxas do TD.
 Escreve /tudo para ver os últimos preços do TD.
-Escreve /difut para ver a cotação do DI futuro.
+Escreve /DI1F17 /DI1F19 /DI1F20 /DI1F22 /DI1F25 para ver a cotação dos DI futuro.
 Para qualqer dúvida, contate o autor: @jaime_GrupoCITEC
+Aceitamos doações em #bitcoin: 1GBHvQVHsxBzmf4FDsnFwjDrNeozcR8n1a
 """)
 
 @bot.message_handler(commands=['tudo'])
@@ -52,11 +53,9 @@ def get_data(myFormat=None):
         'month': datetime.today().month,
         'year': datetime.today().year,
     }
-    _logger.info("url = %s" % (url, ))
     jsjson = requests.get(url)
     content = jsjson.content.decode("utf-8")
     content = json.loads(content)
-    _logger.info("content = %s" % (content, ))
     if 'data' not in content.keys() or not content['data']:
         date = content.get('dta', False)
         if date:
@@ -65,11 +64,9 @@ def get_data(myFormat=None):
                 'month': int(date.split(' ')[0].split('/')[1]),
                 'year': int(date.split(' ')[0].split('/')[2]),
             }
-            _logger.info("url = %s" % (url, ))
             jsjson = requests.get(url)
             content = jsjson.content.decode("utf-8")
             content = json.loads(content)
-            _logger.info("content = %s" % (content, ))
     if 'data' in content.keys():
         data = content['data']
         last_data = {}
@@ -83,19 +80,22 @@ def get_data(myFormat=None):
         for tid, row in last_data.items():
             response += [myFormat.format(**row)]
         response = list(sorted(response))
-        _logger.info("response = %s" % (response, ))
         return response
     else:
         return None
 
-@bot.message_handler(commands=['difut'])
+@bot.message_handler(commands=['DI1F17', 'DI1F19', 'DI1F20', 'DI1F22', 'DI1F25', 'di1f17', 'di1f19', 'di1f20', 'di1f22', 'di1f25'])
 def send_difut(message):
-    content = requests.get('http://br.advfn.com/bolsa-de-valores/bmf/DI1F25/cotacao')
+    _logger.error("message = %s" % (message, ))
+    url = 'http://br.advfn.com/bolsa-de-valores/bmf%s/cotacao' % message.text.upper()
+    _logger.error("url = %s" % (url, ))
+    content = requests.get(url)
+    _logger.error("content = %s" % (content, ))
     soup = BeautifulSoup(content.content)
     difut = soup.findAll('div', attrs={'class': 'TableElement'})[1].findAll('td')[3].text
     if difut:
         chat_id = message.chat.id
-        bot.send_message(chat_id, u'DI Futuro: %s' % difut)
+        bot.send_message(chat_id, u'%s: %s' % (message.text.upper(), difut))
 
 bot.polling()
 
