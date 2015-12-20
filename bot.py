@@ -22,8 +22,7 @@ Olá, sou o bot não oficial to Tesouro Direto
 Escreve /taxas para ver as últimas taxas do TD.
 Escreve /tudo para ver os últimos preços do TD.
 Escreve /DI1F17 /DI1F19 /DI1F20 /DI1F21 /DI1F22 /DI1F25 para ver a cotação dos DI futuro.
-Para qualqer dúvida, contate o autor: @jaime_GrupoCITEC
-Aceitamos doações em #bitcoin: 1GBHvQVHsxBzmf4FDsnFwjDrNeozcR8n1a
+Escreve /donate se quiser agradecer ao autor
 """)
 
 @bot.message_handler(commands=['tudo'])
@@ -96,6 +95,11 @@ def send_difut(message):
     if difut:
         chat_id = message.chat.id
         bot.send_message(chat_id, u'%s: %s' % (message.text.split('@')[0].upper(), difut))
+
+@bot.message_handler(commands=['donate'])
+def donate(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id, u'Aceitamos doações em #bitcoin: 1GBHvQVHsxBzmf4FDsnFwjDrNeozcR8n1a')
 
 bot.polling()
 
