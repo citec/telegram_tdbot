@@ -100,6 +100,8 @@ def send_difut(message):
 def donate(message):
     chat_id = message.chat.id
     bot.send_message(chat_id, u'Aceitamos doações em #bitcoin: 1GBHvQVHsxBzmf4FDsnFwjDrNeozcR8n1a')
+    photo = open('/app/jaime_copay_bitcoin_addr.png', 'rb')
+    bot.send_photo(chat_id, photo)
 
 bot.polling()
 
